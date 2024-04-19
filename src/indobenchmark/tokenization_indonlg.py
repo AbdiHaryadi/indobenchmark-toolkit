@@ -14,8 +14,7 @@
 # limitations under the License
 """ Tokenization classes for IndoNLG model."""
 
-import os
-from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, Optional, Sequence, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 from transformers import PreTrainedTokenizer, BatchEncoding
 
 from collections.abc import Mapping
@@ -27,8 +26,9 @@ from transformers.utils import (
     logging,
     to_py_obj,
 )
+import numpy as np
 import sentencepiece as spm
-from transformers.utils.generic import _is_jax, _is_numpy, _is_tensorflow, _is_torch, _is_torch_device
+from transformers.utils.generic import _is_tensorflow, _is_torch
 
 logger = logging.get_logger(__name__)
 
@@ -101,6 +101,12 @@ class IndoNLGTokenizer(PreTrainedTokenizer):
             "<mask>": 40003
         }
         self.special_ids_to_tokens = {v: k for k, v in self.special_tokens_to_ids.items()}
+        
+        # Giving a warning when exists additional_special_tokens outside of dedicated special tokens.
+        for token in additional_special_tokens:
+            if token not in self.special_tokens_to_ids:
+                print(f"Warning: Additional special tokens will be ignored in IndoNLGTokenizer.")
+                break
         
         # Store Language token ID
         self.javanese_token = '[javanese]'
@@ -343,7 +349,7 @@ class IndoNLGTokenizer(PreTrainedTokenizer):
 
     def decode(self, inputs, skip_special_tokens=False):     
         outputs = super().decode(inputs, skip_special_tokens=skip_special_tokens)
-        return outputs.replace(' ','').replace('▁', ' ')
+        return outputs.replace(' ','').replace(SPIECE_UNDERLINE, ' ')
     
     def _pad_decoder(
         self,

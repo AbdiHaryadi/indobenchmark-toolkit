@@ -163,3 +163,5 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/jupyternotebooks,visualstudiocode,sublimetext,linux,windows,macos
 
 !requirements.txt
+venv
+**/__pycache__
