@@ -14,21 +14,11 @@
 # limitations under the License
 """ Tokenization classes for IndoNLG model."""
 
-from typing import Dict, List, Optional, Tuple, Union
-from transformers import PreTrainedTokenizer, BatchEncoding
+from typing import List, Optional, Tuple, Union
+from transformers import PreTrainedTokenizer
 
-from collections.abc import Mapping
-from transformers.utils import (
-    PaddingStrategy,
-    TensorType,
-    is_tf_available,
-    is_torch_available,
-    logging,
-    to_py_obj,
-)
-import numpy as np
+from transformers.utils import logging
 import sentencepiece as spm
-from transformers.utils.generic import _is_tensorflow, _is_torch
 
 logger = logging.get_logger(__name__)
 
